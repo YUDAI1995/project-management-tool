@@ -15,16 +15,26 @@ class Project {
 }
 
 // listenersのailias別名
-type Listener = (item: Project[]) => void;
+type Listener<T> = (item: T[]) => void;
+
+class State<T> {
+  protected listeners: Listener<T>[] = []; // protected //継承先のクラスからはアクセス可　外部からはアクセス不可
+
+  // なにか変化が起きた時全てのlisters関数を呼び出す。
+  addListener(listenerFn: Listener<T>) {
+    this.listeners.push(listenerFn);
+  }
+}
 
 // project State Management
-class ProjectState {
-  private listeners: Listener[] = [];
+class ProjectState extends State<Project> {
   private project: Project[] = [];
   private static instance: ProjectState; // インスタンスを保持するためのプロパティ
 
   // singleton: 必ずひとつのインスタンスしか存在しない とすることができる
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   // 常に新しいオブジェクトを使用できることを保証する
   static getInstance() {
@@ -33,11 +43,6 @@ class ProjectState {
     }
     this.instance = new ProjectState();
     return this.instance;
-  }
-
-  // なにか変化が起きた時全てのlisters関数を呼び出す。
-  addListener(listenerFn: Listener) {
-    this.listeners.push(listenerFn);
   }
 
   addProject(title: string, description: string, manday: number) {
@@ -169,6 +174,26 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   }
 }
 
+// project Item class
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private project: Project;
+  constructor(hostId: string, project: Project) {
+    super("single-project", hostId, true, project.id);
+    this.project = project;
+
+    this.renderContent();
+  }
+
+  configure() {}
+
+  renderContent() {
+    this.element.querySelector("h2")!.textContent = this.project.title;
+    this.element.querySelector("h3")!.textContent =
+      this.project.manday.toString();
+    this.element.querySelector("p")!.textContent = this.project.description;
+  }
+}
+
 // projectList Class
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   // Componentクラスにあるため削除
@@ -233,12 +258,11 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
       `${this.type}-projects-list`
     )! as HTMLUListElement;
     listEl.innerHTML = "";
-
     for (const prjItem of this.assignedProjects) {
-      const listItem = document.createElement("li");
-      listItem.textContent = prjItem.title;
-
-      listEl.appendChild(listItem);
+      new ProjectItem(listEl.id, prjItem);
+      // const listItem = document.createElement("li");
+      // listItem.textContent = prjItem.title;
+      // listEl.appendChild(listItem);
     }
   }
 
@@ -296,9 +320,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     this.element.addEventListener("submit", this.submitHandler);
   }
 
-  renderContent() {
-    
-  }
+  renderContent() {}
 
   // 3つの入力値のバリデーション
   private gatherUserInput(): [string, string, number] | void {

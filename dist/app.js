@@ -19,9 +19,17 @@ class Project {
         this.status = status;
     }
 }
-class ProjectState {
+class State {
     constructor() {
         this.listeners = [];
+    }
+    addListener(listenerFn) {
+        this.listeners.push(listenerFn);
+    }
+}
+class ProjectState extends State {
+    constructor() {
+        super();
         this.project = [];
     }
     static getInstance() {
@@ -30,9 +38,6 @@ class ProjectState {
         }
         this.instance = new ProjectState();
         return this.instance;
-    }
-    addListener(listenerFn) {
-        this.listeners.push(listenerFn);
     }
     addProject(title, description, manday) {
         const newProject = new Project(Math.random().toString(), title, description, manday, ProjectStatus.Active);
@@ -94,6 +99,20 @@ class Component {
         this.hostElement.insertAdjacentElement(insertAtBeginning ? "afterbegin" : "beforeend", this.element);
     }
 }
+class ProjectItem extends Component {
+    constructor(hostId, project) {
+        super("single-project", hostId, true, project.id);
+        this.project = project;
+        this.renderContent();
+    }
+    configure() { }
+    renderContent() {
+        this.element.querySelector("h2").textContent = this.project.title;
+        this.element.querySelector("h3").textContent =
+            this.project.manday.toString();
+        this.element.querySelector("p").textContent = this.project.description;
+    }
+}
 class ProjectList extends Component {
     constructor(type) {
         super("project-list", "app", false, `${type}-projects`);
@@ -124,9 +143,7 @@ class ProjectList extends Component {
         const listEl = document.getElementById(`${this.type}-projects-list`);
         listEl.innerHTML = "";
         for (const prjItem of this.assignedProjects) {
-            const listItem = document.createElement("li");
-            listItem.textContent = prjItem.title;
-            listEl.appendChild(listItem);
+            new ProjectItem(listEl.id, prjItem);
         }
     }
 }
@@ -141,8 +158,7 @@ class ProjectInput extends Component {
     configure() {
         this.element.addEventListener("submit", this.submitHandler);
     }
-    renderContent() {
-    }
+    renderContent() { }
     gatherUserInput() {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
