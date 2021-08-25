@@ -450,7 +450,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
       !validate(descriptionValidable) ||
       !validate(mandayValidable)
     ) {
-      console.log("入力値が正しくありません");
+      alert("入力値が正しくありません");
       return;
     } else {
       return [enteredTitle, enteredDescription, parseFloat(enteredManday)];

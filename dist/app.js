@@ -248,7 +248,7 @@ class ProjectInput extends Component {
         if (!validate(titleValidable) ||
             !validate(descriptionValidable) ||
             !validate(mandayValidable)) {
-            console.log("入力値が正しくありません");
+            alert("入力値が正しくありません");
             return;
         }
         else {

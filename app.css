@@ -10,6 +10,12 @@ body {
   margin: 0;
 }
 
+main {
+  display: block;
+  max-width: 1090px;
+  margin: 0 auto;
+}
+
 label,
 input,
 textarea {
@@ -26,23 +32,30 @@ textarea {
   font: inherit;
   padding: 0.2rem 0.4rem;
   width: 100%;
-  max-width: 30rem;
   border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 input:focus,
 textarea:focus {
   outline: none;
-  background: #fff5f9;
+  background: #fff5f6;
+}
+
+.form-btn {
+  text-align: center;
 }
 
 button {
   font: inherit;
-  background: #ff0062;
-  border: 1px solid #ff0062;
+  background: #ffae36;
+  border: 1px solid #ff9900;
+  border-radius: 40px;
+  box-shadow: 0 2px 0 #b6710a;
   cursor: pointer;
   color: white;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2rem;
+  transition: .3s;
 }
 
 button:focus {
@@ -51,17 +64,18 @@ button:focus {
 
 button:hover,
 button:active {
-  background: #a80041;
-  border-color: #a80041;
+  background: #ffcb7c;
+  border-color: #ffcb7c;
+  box-shadow: 0 2px 0 #be9b66;
 }
 
 .projects {
   margin: 1rem;
-  border: 1px solid #ff0062;
+  border: 1px solid #f32222;
 }
 
 .projects header {
-  background: #ff0062;
+  background: #f32222;
   height: 3.5rem;
   display: flex;
   justify-content: center;
@@ -69,11 +83,11 @@ button:active {
 }
 
 #finished-projects {
-  border-color: #0044ff;
+  border-color: #2b6ce6;
 }
 
 #finished-projects header {
-  background: #0044ff;
+  background: #2b6ce6;
 }
 
 .projects h2 {
@@ -84,23 +98,26 @@ button:active {
 .projects ul {
   list-style: none;
   margin: 0;
-  padding: 1rem;
+  padding: 3rem 2rem;
 }
 
 .projects li {
-  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.26);
   padding: 1rem;
-  margin: 1rem;
   background-color: white;
 }
 
+.projects li + li {
+  margin-top: 20px;
+}
+
 .projects li h2 {
-  color: #ff0062;
+  color: #f32222;
   margin: 0.5rem 0;
 }
 
 #finished-projects li h2 {
-  color: #0044ff;
+  color: #2b6ce6;
 }
 
 .projects li h3 {
@@ -122,7 +139,8 @@ button:active {
 
 #user-input {
   margin: 1rem;
-  padding: 1rem;
-  border: 1px solid #ff0062;
+  padding: 1rem 2rem;
+  border: 1px solid #b9ae94;
+  border-radius: 2px;
   background: #f7f7f7;
 }
